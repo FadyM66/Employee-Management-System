@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 import re
-
+from .responses import Responses as r
 
 class validator:
     
@@ -213,7 +213,11 @@ class validator:
 
     @staticmethod
     def validate_user_signup(data: dict):
-        required_fields = ['email', 'password', 'role']
+        
+        if not data:
+            return r.set_data(data=data).missing_data
+        
+        required_fields = ['name','email', 'password', 'role']
         errors = {}
         
         # Check for missing required fields

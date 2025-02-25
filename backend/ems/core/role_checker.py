@@ -8,7 +8,7 @@ def role_required(allowed_roles):
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
-            # Extract token from Authorization header
+
             auth_header = request.headers.get("Authorization")
             if not auth_header or not auth_header.startswith("Bearer "):
                 return JsonResponse(
@@ -16,11 +16,11 @@ def role_required(allowed_roles):
                 )
 
             try:
-                # Decode token
+
                 token = auth_header.split(" ")[1]
                 payload = jwt.decode(
                     token,
-                    settings.SECRET_KEY,  # Your Django secret key
+                    settings.SECRET_KEY,  
                     algorithms=["HS256"],
                 )
 
@@ -33,8 +33,9 @@ def role_required(allowed_roles):
                         {"error": f"Forbidden - Requires {allowed_roles}"}, status=403
                     )
 
-                # Attach role to request for later use
-                request.user_role = user_role
+
+                request.payload = payload
+                
                 return view_func(request, *args, **kwargs)
 
             except jwt.ExpiredSignatureError:
