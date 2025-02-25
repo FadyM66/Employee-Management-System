@@ -14,8 +14,4 @@ def register(request):
     
     is_valid = validator.validate_user_signup(new_user_data)
     
-    if is_valid:
-        # return r.set_data(new_user_data).created
-        return is_valid
-    else:
-        return r.server_error
+    

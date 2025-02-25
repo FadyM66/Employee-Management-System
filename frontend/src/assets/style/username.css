@@ -1,0 +1,17 @@
+#topright {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    display: flex;
+    gap: 1rem;
+}
+
+#signout {
+    cursor: pointer;
+    font-size: medium;
+    font-weight: 300;
+}
+
+#signout:hover {
+    text-decoration: underline;
+}

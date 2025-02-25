@@ -1,0 +1,38 @@
+.card-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1000;
+    overflow-y: auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.card-form {
+    width: 100%;
+    height: 100%;
+}
+
+.company-options,
+.department-options {
+    padding: 2rem 0rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.option-btn:active {
+    transition: none;
+    background-color: rgba(0, 0, 0, 0.541);
+}
+
+.select-company {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
