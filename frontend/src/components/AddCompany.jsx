@@ -1,6 +1,6 @@
 import '../assets/style/addprompt.css'
 import { useFormik } from 'formik';
-import { company } from '../utils/schema.js';
+import { company } from '../schemas/schema.js';
 import fetcher from '../utils/fetcher.js';
 import { handleCancel } from '../utils/handlers.js';
 import InputRow from './InputRow.jsx';

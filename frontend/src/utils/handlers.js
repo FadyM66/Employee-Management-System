@@ -1,5 +1,5 @@
 import fetcher from "./fetcher";
-
+import Cookies from 'js-cookie';
 
 export const handleDelete = (setSelectedId, setIsOpen, id) => {
     setSelectedId(id)
@@ -88,4 +88,27 @@ export const handleAccount = async (email) => {
     if (response.status == 404){
         return 404
     }
+}
+
+/**
+ * 
+ * @data - Array 
+ */
+
+export const sessionDataHandler = (data) => {
+     Object.entries(data).forEach(([key, value])=> {
+        Cookies.set(key, value)
+     })
+}
+
+/**
+ * 
+ * Clear session cookies 
+ */
+
+export const signoutClearCookies = () => {
+    const allCookies = Cookies.get()
+    Object.entries(allCookies).forEach(([key, value])=> {
+       Cookies.remove(key, value)
+    })
 }

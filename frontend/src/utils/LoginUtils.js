@@ -1,35 +1,20 @@
-import Cookies from 'js-cookie';
+import React from 'react';
 import fetcher from './fetcher';
+import { sessionDataHandler } from './handlers.js';
 
-export const handleLoginSubmit = async (values, { setSubmitting, setFieldError }, navigate) => {
+export const handleLoginSubmit = async (values, { setSubmitting, setFieldError }, setSubmissionResult) => {
 
     setSubmitting(true);
     try {
-        const { response, data } = await fetcher(
-            'http://localhost:8000/user/login',
-            "POST",
-            values,
-            true
-        )
-        if (response.status == 200) {
-            Cookies.set("token", data.data.token)
-            Cookies.set("role", data.data.data.role)
-            Cookies.set("name", data.data.data.username)
-            navigate('/home')
+        let returns = {
+            "token": true,
+            "email": true,
+            "name": "Fady"
         }
-        else if (response.status == 401) {
-            setFieldError('password', "invalid password")
-        }
-        else if (response.status == 404) {
-            setFieldError('email', "user not found")
-        }
-        else {
-            setFieldError('password', "try again later")
-        }
-        setSubmitting(false);
+        sessionDataHandler(returns)
+        setSubmissionResult(returns)
     }
     catch (error) {
-        setFieldError('password', 'try again later')
+        console.log("failed: ", error)
     }
-
 }

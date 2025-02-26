@@ -1,19 +1,16 @@
-import Cookies from "js-cookie"
+import useAuthContext from '../context/AuthContext';
 import '../assets/style/username.css'
 
+
 const Username = () => {
+
+    const { name } = useAuthContext();
+
     return (
-        <>
-            <div id="topright">
-                <p id="signout" onClick={() => {
-                    Cookies.remove('token');
-                    Cookies.remove('name');
-                    Cookies.remove('role');
-                    window.location.href = "/"
-                    }}>Sign out</p>
-            </div>
-        </>
-    )
-}
+        <div id="username-btn">
+            <p>{ name || null }</p>
+        </div>
+    );
+};
 
 export default Username;

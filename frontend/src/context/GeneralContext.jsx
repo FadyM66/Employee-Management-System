@@ -1,9 +1,9 @@
-import React, { createContext, useState} from "react";
+import React, { createContext, useContext, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 
-export const GeneralContext = createContext();
+const GeneralContext = createContext();
 
-export const GeneralContextProvider = ({children}) => {
+const GeneralContextProvider = ({children}) => {
 
     const navigate = useNavigate();
 
@@ -15,3 +15,8 @@ export const GeneralContextProvider = ({children}) => {
         </GeneralContext.Provider>
     )
 }; 
+
+
+const useGeneralContext = useContext(GeneralContext);
+
+export default useGeneralContext;

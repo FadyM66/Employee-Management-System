@@ -1,0 +1,25 @@
+#Signout-btn {
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    display: flex;
+    gap: 1rem;
+}
+
+#Signout-btn > p {
+    cursor: pointer;
+}
+
+#Signout-btn > p::after {
+    display: flex;
+    content: "";
+    background-color: black;
+    width: 0px;
+    height: 1px;
+    transition: width 0.2s;
+}
+
+
+#Signout-btn > p:hover::after {
+    width: 50px;
+}

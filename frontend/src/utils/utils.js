@@ -20,3 +20,16 @@ export const getData = async (url, { setData, setDataState }) => {
         console.log('Error fetching data:', error);
     }
 };
+
+export const signInLoading = (setSignInStr) => {
+    let count = 1;
+    let interval = setInterval(() => {
+        if (count > 3) {
+          count = 1;
+        }
+        console.log(count)
+        setSignInStr(`Signing in ${".".repeat(count)}`);
+        count++;
+      }, 500);
+    return ()=> clearInterval(interval)
+};

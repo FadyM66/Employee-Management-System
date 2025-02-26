@@ -1,42 +1,37 @@
-import { useEffect, useContext } from 'react';
-import { useFormik } from 'formik';
-import { loginSchema } from '../utils/schema.js';
-
-import Cookies from 'js-cookie';
-
+import { useEffect } from 'react';
+import useAuthContext from '../context/AuthContext.jsx';
 import InputRow from '../components/InputRow.jsx';
-import Logo from '../components/Logo.jsx';
-import { GeneralContext } from '../context/GeneralContext.jsx';
-import { handleLoginSubmit } from '../utils/LoginUtils.js';
-
+import { useLoginForm } from '../utils/validators.js';
 import '../assets/style/login.css';
 
 
 const Login = () => {
 
-    const { navigate } = useContext(GeneralContext);
+    const { setToken, setEmail, setName } = useAuthContext();
 
-    useEffect(() => {
-        if (Cookies.get('token')) {
-            navigate('/home')
-        }
-    }, []);
+    const {
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        submissionResult
+      } = useLoginForm();
 
-    const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = useFormik({
-        initialValues: {
-            email: "",
-            password: "",
-        },
-        validationSchema: loginSchema,
-        onSubmit: (values, formikHelpers) => handleLoginSubmit(values, formikHelpers, navigate),
-    });
+    useEffect (()=>{
+        if (submissionResult){
+            setToken(submissionResult.token)
+            setEmail(submissionResult.email)
+            setName(submissionResult.name)}      
+    },[submissionResult])
 
     return (
-        <>
-            <Logo />
+        <>            
             <div className="login-card">
                 <div className="login-text">
-                    <h1 className='prompt-h1'>Sign in to EMS</h1>
+                    <h1 className='prompt-h1'>Sign in</h1>
                     <p className='prompt-p'>Welcome back! Please sign in to continue</p>
                 </div>
                 <div className="form-container">
@@ -67,8 +62,8 @@ const Login = () => {
                             type="password"
                             placeholder="Enter your password"
                         />
-                        <button id='signin-btn' type="submit" disabled={isSubmitting}>
-                            <span>{isSubmitting ? 'Signing in...' : 'Sign in'}</span>
+                        <button id='signin-btn' type="submit">
+                            <span>{isSubmitting ? "Signning in" : 'Sign in'}</span>
                         </button>
                     </form>
                 </div>

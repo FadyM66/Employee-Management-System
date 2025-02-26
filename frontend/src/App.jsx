@@ -1,57 +1,37 @@
-import { useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { GeneralContextProvider } from './context/GeneralContext';
-
+import useAuthContext, { AuthContextProvider } from './context/AuthContext.jsx';
+import Logo from './components/Logo.jsx';
+import Username from './components/Username.jsx';
+import Home from './pages/Home.jsx';
 import Login from './pages/Login';
-import TopBar from './components/TopBar';
-import Footer from './components/Footer';
-import Username from './components/Username';
-import Logo from './components/Logo';
-import User from './pages/User';
-import CompaniesWrapper from './pages/Companies';
-import DepartmentsWrapper from './pages/Departments';
-import Employees from './pages/Employees';
-
+import SignoutBtn from './components/SignoutBtn.jsx';
 import './assets/style/general.css';
 import './assets/style/common.css';
 
+/** 
+ *   The Layout is a bridge, so we can use the context inside the context provider at the App component.
+ */
 
 function App() {
 
-  const role = Cookies.get('role')
+  return (
+     <>
+        <AuthContextProvider>
+          <Layout />
+        </AuthContextProvider>
+      </>
+    );
+}
 
-  useEffect(() => {
-    if (!Cookies.get('token') && window.location.pathname != '/login') {
-      window.location.href = '/login'
-    }
-  }, []);
+function Layout() {
+
+  const { isLoggedIn, name } = useAuthContext();
 
   return (
     <>
       <Logo />
-      {window.location.pathname != '/login' && (
-        <>
-          <TopBar />
-          <Username />
-          <Footer />
-        </>
-      )}
-      {
-        role == 'employee' ?
-          <User /> :
-          <Router>
-            <GeneralContextProvider >
-              <Routes>
-                <Route path='/login' element={<Login />} />
-                <Route path='/companies' element={<CompaniesWrapper />} />
-                <Route path='/departments' element={<DepartmentsWrapper />} />
-                <Route path='/employees' element={<Employees />} />
-                <Route path='/user' element={<User />} />
-              </Routes>
-            </GeneralContextProvider>
-          </Router>
-      }
+      <Username />
+      {isLoggedIn ? <Home /> : <Login />}
+      <SignoutBtn />
     </>
   );
 }
