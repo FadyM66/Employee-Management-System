@@ -240,8 +240,8 @@ class validator:
         if not errors:
             for field in required_fields:
                 validated_data[field] = data[field]
-                
-        return (r.created, validated_data) if not errors else (r.set_data(errors).invalid_data, None)
+        
+        return (r.created, validated_data) if not errors else r.set_data(errors).invalid_data
 
     @staticmethod
     def validate_company_signup(data: dict):

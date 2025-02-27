@@ -2,7 +2,7 @@ from functools import wraps
 from django.http import JsonResponse
 import jwt
 from django.conf import settings
-
+from .utils import validate_JWT
 
 def role_required(allowed_roles):
     def decorator(view_func):
@@ -18,11 +18,7 @@ def role_required(allowed_roles):
             try:
 
                 token = auth_header.split(" ")[1]
-                payload = jwt.decode(
-                    token,
-                    settings.SECRET_KEY,  
-                    algorithms=["HS256"],
-                )
+                payload = validate_JWT(token)
 
                 # Get role from token payload
                 user_role = payload.get("role")

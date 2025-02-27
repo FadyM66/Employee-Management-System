@@ -22,25 +22,26 @@ def register(request):
         new_user_data = request.data
         
         # Validate the incoming data      
-        response, validated_data  = validator.validate_user_signup(new_user_data)
+        result = validator.validate_user_signup(new_user_data)
         
-        # Create new user
-        if validated_data:
-            
-            # Replace the plain password with hashed one
-            validated_data['password'] = hash_password(validated_data['password'])
-            new_user = User(**validated_data)
-            new_user.save()
-            
-            return response
+        if isinstance(result, tuple):
+            response, validated_data = result
+
+            if validated_data:
+                # Create new user
+                # Replace the plain password with hashed one
+                validated_data['password'] = hash_password(validated_data['password'])
+                new_user = User(**validated_data)
+                new_user.save()
+                return response        
         
-        else:
-            return response
+        return result
     
     except IntegrityError as e:
         return r.set_data({}).conflict
         
     except Exception as e:
+        print(f"Error: {str(e)}")
         return r.set_data({}).server_error
     
     
@@ -57,5 +58,3 @@ def login(request):
     
     except Exception as e:
         return r.server_error
-    
-    
