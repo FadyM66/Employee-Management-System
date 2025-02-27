@@ -88,7 +88,7 @@ class validator:
             else:
                 errors[field] = "Invalid field"
         
-        return validated_data if not errors else {'errors': errors}
+        return validated_data if not errors else r.set_data(errors).invalid_data
 
     @staticmethod
     def email_validator(email):
@@ -99,9 +99,7 @@ class validator:
             if not re.fullmatch(validator.fields_specs['email']['regx'], email):
                 errors['email'] = "Invalid email format"
         
-        if errors:
-            raise ValidationError(errors)
-        return True
+        return True if not errors else {'errors': errors}
 
     @staticmethod
     def name_validator(name):
@@ -213,32 +211,37 @@ class validator:
 
     @staticmethod
     def validate_user_signup(data: dict):
-        
         if not data:
             return r.set_data(data=data).missing_data
         
         required_fields = ['name','email', 'password', 'role']
+        validated_data = {}
         errors = {}
         
         # Check for missing required fields
         for field in required_fields:
             if field not in data:
-                errors[field] = "This field is required"
+                errors[field] = "Required"
         
         if errors:
-            return {'errors': errors}
+            return r.set_data(errors).missing_data
             
         # Validate each field
         email_validation = validator.email_validator(data['email'])
+        name_validation = validator.name_validator(data['name'])
         password_validation = validator.password_validator(data['password'])
         role_validation = validator.role_validator(data['role'])
         
         # Collect any validation errors
-        for validation in [email_validation, password_validation, role_validation]:
+        for validation in [email_validation, name_validation, password_validation, role_validation]:
             if isinstance(validation, dict) and 'errors' in validation:
                 errors.update(validation['errors'])
         
-        return True if not errors else {'errors': errors}
+        if not errors:
+            for field in required_fields:
+                validated_data[field] = data[field]
+                
+        return (r.created, validated_data) if not errors else (r.set_data(errors).invalid_data, None)
 
     @staticmethod
     def validate_company_signup(data: dict):

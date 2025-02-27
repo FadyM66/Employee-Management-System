@@ -34,7 +34,7 @@ class Responses:
         data = cls._data
         
         return Response(
-            {"error": "No data provided", **({"data": data} if data else {})},
+            {"error": "Missing data", **({"data": data} if data else {})},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -43,7 +43,7 @@ class Responses:
         """400 - Invalid request data format"""
         data = cls._data
         return Response(
-            {"error": "Invalid data provided", **({"data": data} if data else {})},
+            {"error": "Invalid data", **({"data": data} if data else {})},
             status=status.HTTP_400_BAD_REQUEST
         )
 

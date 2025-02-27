@@ -2,9 +2,9 @@ from datetime import datetime, timedelta, timezone
 from django.conf import settings
 import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from django.contrib.auth.hashers import make_password, check_password
 
-
-def JWT_generator(**kwargs):
+def JWT_generator(payload:dict) -> str:
     """
     Generate a JWT (JSON Web Token).
     
@@ -19,11 +19,11 @@ def JWT_generator(**kwargs):
         Exception: For unexpected errors during token generation.
     """
 
-    if not kwargs:
+    if not payload:
         raise Exception("Empty payload")
     
     try:
-        payload = {key: value for key, value in kwargs.items()}
+        payload = {key: value for key, value in payload.items()}
         
         payload["exp"] = datetime.now(timezone.utc) + timedelta(days=7)
         payload["iat"] = datetime.now(timezone.utc) 
@@ -63,3 +63,12 @@ def validate_JWT(token):
     
     except InvalidTokenError as e:
         raise Exception("Invalid token")
+
+
+
+def hash_password(plain_password: str) -> str:
+    return make_password(plain_password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return check_password(plain_password, hashed_password)
