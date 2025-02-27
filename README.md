@@ -91,7 +91,7 @@ Run the project with the automation script:
 ```bash
 python run_project.py
 ```
-### Option 1: Automated Setup (Recommended)
+### Option 2: Manual Setup 
 
 ### Backend
 ```bash
