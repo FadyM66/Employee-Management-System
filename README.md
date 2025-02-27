@@ -90,7 +90,7 @@ A full-stack application for managing companies, departments, and employees with
 Run the project with the automation script:
 ```bash
 python run_project.py
-
+```
 ### Option 1: Automated Setup (Recommended)
 
 ### Backend
@@ -103,13 +103,13 @@ cd backend/ems
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-
+```
 ### Frontend
 ```bash
 cd ../../frontend
 npm install
 npm start
-
-Frontend: http://localhost:5173
-Backend API: http://localhost:8000/
+```
+## Frontend: http://localhost:5173
+## Backend API: http://localhost:8000/
 
