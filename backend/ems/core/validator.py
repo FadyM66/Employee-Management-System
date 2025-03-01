@@ -45,7 +45,7 @@ class validator:
         'status': {'type': str, 'options': ['Application Received', 'Interview Scheduled', 'Not Accepted', 'Hired']},
         'mobile_phone': {'type': str, 'regx': r'^(?:\+20|0)1[0125]\d{8}$'},
         'address': {'type': str},
-        'role': {'type': str, 'options': ['admin', 'user', 'manager']}
+        'role': {'type': str, 'options': ['admin', 'manager', 'employee']}
     }
 
     # General validator

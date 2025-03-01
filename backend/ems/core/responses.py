@@ -27,12 +27,18 @@ class Responses:
         cls._data = data
         return cls
     
+    @classmethod
+    def _get_and_reset_data(cls):
+        """Get the current data and reset to None"""
+        data = cls._data
+        cls._data = None
+        return data
+    
     # Client Errors (4xx)
     @ClassProperty
     def missing_data(cls):
         """400 - Request missing required data"""
-        data = cls._data
-        
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Missing data", **({"data": data} if data else {})},
             status=status.HTTP_400_BAD_REQUEST
@@ -41,7 +47,7 @@ class Responses:
     @ClassProperty
     def invalid_data(cls):
         """400 - Invalid request data format"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Invalid data", **({"data": data} if data else {})},
             status=status.HTTP_400_BAD_REQUEST
@@ -50,7 +56,7 @@ class Responses:
     @ClassProperty
     def unauthorized(cls):
         """401 - Authentication required"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Authentication required", **({"data": data} if data else {})},
             status=status.HTTP_401_UNAUTHORIZED
@@ -59,7 +65,7 @@ class Responses:
     @ClassProperty
     def forbidden(cls):
         """403 - Insufficient permissions"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "You don't have permission for this action", **({"data": data} if data else {})},
             status=status.HTTP_403_FORBIDDEN
@@ -68,7 +74,7 @@ class Responses:
     @ClassProperty
     def not_found(cls):
         """404 - Resource not found"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Requested resource not found", **({"data": data} if data else {})},
             status=status.HTTP_404_NOT_FOUND
@@ -77,7 +83,7 @@ class Responses:
     @ClassProperty
     def method_not_allowed(cls):
         """405 - Invalid HTTP method"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "HTTP method not allowed", **({"data": data} if data else {})},
             status=status.HTTP_405_METHOD_NOT_ALLOWED
@@ -86,7 +92,7 @@ class Responses:
     @ClassProperty
     def conflict(cls):
         """409 - Resource conflict"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Resource already exists", **({"data": data} if data else {})},
             status=status.HTTP_409_CONFLICT
@@ -96,7 +102,7 @@ class Responses:
     @ClassProperty
     def server_error(cls):
         """500 - Generic server error"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"error": "Internal server error", **({"data": data} if data else {})},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -106,7 +112,7 @@ class Responses:
     @ClassProperty
     def created(cls):
         """201 - Resource created successfully"""
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"message": "Resource created successfully", **({"data": data} if data else {})},
             status=status.HTTP_201_CREATED
@@ -114,7 +120,7 @@ class Responses:
 
     @ClassProperty
     def ok(cls):
-        data = cls._data
+        data = cls._get_and_reset_data()            
         return Response(
             {"message": "Operation completed successfully", **({"data": data} if data else {})},
             status=status.HTTP_200_OK

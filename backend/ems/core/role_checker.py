@@ -26,7 +26,7 @@ def role_required(allowed_roles):
                 # Role validation
                 if user_role not in allowed_roles:
                     return JsonResponse(
-                        {"error": f"Forbidden - Requires {allowed_roles}"}, status=403
+                        {"error": f"Forbidden - Unauthorized"}, status=403
                     )
 
 

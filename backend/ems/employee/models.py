@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.validators import MinLengthValidator, RegexValidator
-
+from user.models import User
 
 class Employee(models.Model):
 
@@ -104,6 +104,15 @@ class Employee(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_clean()    
+
+        if self.email and not self.user:
+            try:
+                matching_user = User.objects.get(email=self.email)
+                self.user = matching_user
+                
+            except User.DoesNotExist:
+                pass
+
         super().save(*args, **kwargs)
 
     @property
