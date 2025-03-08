@@ -6,9 +6,9 @@ from core.responses import Responses as r
 def login_utility(data: dict) -> str:
     try:
         user = User.objects.get(email=data["email"])
-        print(user.email)
+
         if verify_password(data["password"], user.password):
-            payload = {"name": user.name, "role": user.role}
+            payload = {"email": user.email, "role": user.role}
             token = JWT_generator(payload)
             return r.set_data({"token": token}).ok
         else:

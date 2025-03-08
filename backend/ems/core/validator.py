@@ -39,7 +39,7 @@ class validator:
     # Fields specs
 
     fields_specs = {
-        'name' : {'type': str, 'min': 2, 'max': 255, 'regx': r'^[A-Za-z]+$'},
+        'name' : {'type': str, 'min': 2, 'max': 255, 'regx': r'^[A-Za-z\s]+$'},
         'password' : {'type': str, 'min': 8, 'regx': r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$'},
         'email' : {'type': str, 'regx': r'^(?=.{1,255}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'},
         'status': {'type': str, 'options': ['Application Received', 'Interview Scheduled', 'Not Accepted', 'Hired']},
@@ -246,9 +246,12 @@ class validator:
     @staticmethod
     def validate_company_signup(data: dict):
         if 'name' not in data:
-            return {'errors': {'name': "This field is required"}}
+            return r.set_data({'errors': {'name': "This field is required"}}).missing_data
             
-        return validator.name_validator(data['name'])
+        is_valid = validator.name_validator(data['name'])
+        
+        return (r.created, {"name": data['name']}) if is_valid == True else r.set_data(is_valid).invalid_data
+                 
 
     @staticmethod
     def validate_department_signup(data: dict):

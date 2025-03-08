@@ -1,8 +1,10 @@
 from django.urls import path
+from .views import *
 
-from .views import test, x
 
 urlpatterns = [
-    path('test', test),
-    path('*', x)
+    path('create', create),
+    path('get', get),
+    path('delete', delete),
+    path('update', update),
 ]

@@ -5,6 +5,7 @@ from department.models import Department
 from employee.models import Employee
 from user.models import User
 
+from .validator import validator
 from .responses import Responses as r
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -41,13 +42,25 @@ def role_permitter(view_func):
             if role == "admin":
 
                 if method == "GET":
-                    request.records = model.objects.filter(**data)
+                    is_valid = validator.validator(data)
+                    if isinstance(is_valid, dict):
+                        request.records = model.objects.filter(**is_valid)
+                        if request.records.count() == 0:
+                            return r.not_found
+                    else:
+                        return is_valid
 
                 elif method == "POST":
                     request.model = model
-
+                    
                 elif method == "DELETE":
-                    request.records = model.objects.filter(**data)
+                    data = validator.validator(data)
+                    if isinstance(data, dict):
+                        request.records = model.objects.filter(**data)
+                        if request.records.count() == 0:
+                            return r.not_found
+                    else:
+                        return r.invalid_data
 
                 elif method == "PATCH":
                     request.model = model

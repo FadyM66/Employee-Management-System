@@ -1,7 +1,6 @@
 from functools import wraps
 from django.http import JsonResponse
 import jwt
-from django.conf import settings
 from .utils import validate_JWT
 from core.responses import Responses as r
 

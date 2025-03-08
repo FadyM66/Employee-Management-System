@@ -58,11 +58,9 @@ def validate_JWT(token):
 
         decoded_token = jwt.decode(token, settings.SECRET_KEY_JWT, algorithms=["HS256"])
 
-        is_existed = User.objects.filter(email=decoded_token.get("email")).first()
+        is_existed = User.objects.filter(email=decoded_token.get("email")).exists()
 
-        if decoded_token.get("role") == "admin":
-            pass
-        elif not is_existed:
+        if not is_existed:
             raise jwt.InvalidTokenError
 
         return decoded_token
