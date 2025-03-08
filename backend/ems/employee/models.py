@@ -34,19 +34,22 @@ class Employee(models.Model):
     mobile_number = models.CharField(
         max_length=15,
         unique=True,
+        blank=True,
         validators=[RegexValidator(r'^(?:\+20|0)1[0125]\d{8}$')],
         verbose_name=("Mobile Number")
     )
     
     address = models.TextField(
         null=True,
+        blank=True,
         verbose_name=("Full Address")
     )
     
     designation = models.CharField(
         max_length=255,
         validators=[MinLengthValidator(2)],
-        verbose_name=("Job Title")
+        verbose_name=("Job Title"),
+        blank=True,
     )
     
     status = models.CharField(
@@ -69,6 +72,7 @@ class Employee(models.Model):
         'user.User',
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         verbose_name=("User Account")
     )
 
@@ -120,5 +124,5 @@ class Employee(models.Model):
         return self.department.company
 
     def __str__(self):
-        return f"{self.name} ({self.designation}) - {self.company.name}"
+        return f"{self.name} {self.designation} - {self.company.name}"
     

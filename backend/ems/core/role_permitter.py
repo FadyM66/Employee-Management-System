@@ -42,9 +42,18 @@ def role_permitter(view_func):
             if role == "admin":
 
                 if method == "GET":
+                    
                     is_valid = validator.validator(data)
+
                     if isinstance(is_valid, dict):
+
+                        if app_name == 'department' and len(is_valid.items()) > 0:
+
+                            is_valid['company__name'] = is_valid['company']
+                            del is_valid['company']
+
                         request.records = model.objects.filter(**is_valid)
+                        
                         if request.records.count() == 0:
                             return r.not_found
                     else:
@@ -55,7 +64,12 @@ def role_permitter(view_func):
                     
                 elif method == "DELETE":
                     data = validator.validator(data)
+                    
                     if isinstance(data, dict):
+                        if app_name == 'department':
+                            data['company__name'] = data['company']
+                            del data['company']
+
                         request.records = model.objects.filter(**data)
                         if request.records.count() == 0:
                             return r.not_found
@@ -85,10 +99,14 @@ def role_permitter(view_func):
                         request.records = model.objects.filter(
                             name=manager.department.company
                         )
+                        if request.records.count() == 0:
+                            return r.not_found
 
                     elif model == Department:
                         request.records = model.objects.filter(name=manager.department)
-
+                        if request.records.count() == 0:
+                            return r.not_found
+                        
                     elif model == Employee:
                         request.records = model.objects.filter(
                             department=manager.department

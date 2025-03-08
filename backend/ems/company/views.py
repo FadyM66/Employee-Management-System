@@ -5,8 +5,6 @@ from core.validator import validator
 from core.responses import Responses as r
 from django.db import IntegrityError
 from .serializer import company_serializer
-from django.core.exceptions import ValidationError
-from .models import Company
 
 
 @api_view(['POST'])
@@ -39,7 +37,7 @@ def create(request):
     
     
 @api_view(['GET'])
-@role_required(['admin'])
+@role_required(['admin', 'manager'])
 @role_permitter
 def get(request):
     """Get company endpoint"""

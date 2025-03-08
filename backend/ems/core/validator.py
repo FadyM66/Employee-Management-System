@@ -40,6 +40,7 @@ class validator:
 
     fields_specs = {
         'name' : {'type': str, 'min': 2, 'max': 255, 'regx': r'^[A-Za-z\s]+$'},
+        'company' : {'type': str, 'min': 2, 'max': 255, 'regx': r'^[A-Za-z\s]+$'},
         'password' : {'type': str, 'min': 8, 'regx': r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$'},
         'email' : {'type': str, 'regx': r'^(?=.{1,255}$)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'},
         'status': {'type': str, 'options': ['Application Received', 'Interview Scheduled', 'Not Accepted', 'Hired']},
@@ -255,7 +256,24 @@ class validator:
 
     @staticmethod
     def validate_department_signup(data: dict):
-        if 'name' not in data:
-            return {'errors': {'name': "This field is required"}}
-            
-        return validator.name_validator(data['name'])
+        if 'name' not in data.keys():
+            return r.set_data({'errors': {'name': "This field is required"}}).missing_data
+        
+        if 'company' not in data.keys():
+            return r.set_data({'errors': {'company': "This field is required"}}).missing_data
+
+        name_validation = validator.name_validator(data['name'])
+        company_validation = validator.name_validator(data['company'])
+        
+        if name_validation == True and company_validation == True:
+            return (r.created, {"name": data['name'], 'company': data['company']})
+        
+        errors = {}
+        
+        if name_validation != True and 'errors' in name_validation and 'name' in name_validation['errors']:
+            errors['name'] = name_validation['errors']['name']
+        
+        if company_validation != True and 'errors' in company_validation and 'name' in company_validation['errors']:
+            errors['company'] = company_validation['errors']['name']
+        
+        return r.set_data({'errors': errors}).invalid_data            
